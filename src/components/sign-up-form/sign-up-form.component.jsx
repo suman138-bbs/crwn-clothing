@@ -1,9 +1,9 @@
-import { useState,useContext } from "react";
+import { useState } from "react";
 import FormInput from "../form-input/form-input.component";
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 import './sign-uo-form.styles.scss';
 import Button from "../button/button.component";
-import { UserContext } from "../../contexts/user.context";
+
 
 const defaultFormFields = {
     displayName: '',
@@ -16,7 +16,7 @@ const SignUpForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { displayName, email, password, confirmPassword } = formFields;
      
-    const { setCurrentUser } = useContext(UserContext); 
+   
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields)
@@ -26,13 +26,12 @@ const SignUpForm = () => {
         event.preventDefault();
        if (password !== confirmPassword) {
             alert("Passwords do not match")
-            return;
+            return; 
             
         }
         try {
             const {user}= await createAuthUserWithEmailAndPassword(email, password);
             await createUserDocumentFromAuth(user, { displayName });
-            setCurrentUser(user);
             resetFormFields();
             
         } catch (error) {
