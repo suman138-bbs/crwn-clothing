@@ -4,8 +4,8 @@ const Home = () => {
   
     return (
         <>
-             <Outlet/>
             <Directory />
+             <Outlet/>
         </>
       
   );
