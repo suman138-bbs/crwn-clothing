@@ -1,5 +1,5 @@
-import { createContext, useState,useEffect,useReducer } from "react";
-
+import { createContext, useReducer } from "react";
+import { createAction } from '../utils/reducer/reducer.utils'
 const addCartItem = (cartItems, productToAdd) => {
     const existingCartItem = cartItems.find((cartItem) => cartItem.id === productToAdd.id);
 
@@ -50,31 +50,39 @@ export const CartContext = createContext({
 })
 
 const CART_ACTION_TYPE = {
-    SET_CART_OPEN: "SET_CART_OPEN",
-    
+    SET_CART_ITEMS:'SET_CART_ITEMS',
+    SET_IS_CART_OPEN: 'SET_IS_CART_OPEN',
 }
+
+
+
+const INITIAL_STATE = {
+    isCartOpen: false,
+     cartCount: 0,
+    cartTotal: 0,
+    cartItems: []
+}
+
 
 const cartReducer = (state, action) => {
     
     const { type, payload } = action
      switch (type) {
-        case 'SET_CART_ITEMS':
+        case CART_ACTION_TYPE.SET_CART_ITEMS:
             return {
                 ...state,...payload
-            }
+             }
+         case CART_ACTION_TYPE.SET_IS_CART_OPEN:
+             return {
+                 ...state,...payload
+             }
+             
         default:
             throw new Error(`unhandled type ${type} in Cart Reducer`)
     }
     
 }
 
-
-const INITIAL_STATE = {
-    isCartOpen: true,
-     cartCount: 0,
-    cartTotal: 0,
-    cartItems: []
-}
 
 
 export const CartProvider = ({ children }) => {
@@ -86,9 +94,16 @@ export const CartProvider = ({ children }) => {
 
         const newCartTotal = newCartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0)
         
-        dispatch({ type: 'SET_CART_ITEMS', payload: { cartItems: newCartItems, cartTotal:newCartTotal,cartCount:newCartCount}})
+        dispatch(createAction(  CART_ACTION_TYPE.SET_CART_ITEMS,  { cartItems: newCartItems, cartTotal:newCartTotal,cartCount:newCartCount}))
         
     }
+
+    const setIsCartOpen = (bool) => {
+        
+        dispatch(createAction(CART_ACTION_TYPE.SET_IS_CART_OPEN,{isCartOpen:bool}))
+    }
+
+
 
     
     const addItemToCart = (productToAdd) => {
@@ -109,7 +124,7 @@ export const CartProvider = ({ children }) => {
     }
     
 
-    const value = {isCartOpen,setIsCartOpen:true,addItemToCart,cartItems,cartCount,removeItemFromCart,deleteItemFromCart,cartTotal}
+    const value = {isCartOpen,setIsCartOpen,addItemToCart,cartItems,cartCount,removeItemFromCart,deleteItemFromCart,cartTotal}
     return <CartContext.Provider value={value}>{ children}</CartContext.Provider>
 }
 
