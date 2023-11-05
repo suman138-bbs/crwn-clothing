@@ -11,7 +11,8 @@ const ProductCard = ({ product }) => {
     
     const addProductToCart = ()=>addItemToCart(product)
 
-    return(<div className='product-card-container'>
+    return (
+    <div className='product-card-container'>
         <img src={imageUrl} alt={`${name}` } />
         <div className='footer'>
             <span className='name'>{name }</span>
@@ -19,7 +20,8 @@ const ProductCard = ({ product }) => {
         </div>
         <Button buttonType={BUTTON_TYPE_CLASSES.inverted}  onClick = {addProductToCart}>Add to card</Button>
 
-    </div>)
+    </div>
+    )
     
 }
 

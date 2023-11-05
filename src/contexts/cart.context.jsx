@@ -67,7 +67,8 @@ const INITIAL_STATE = {
 const cartReducer = (state, action) => {
     
     const { type, payload } = action
-     switch (type) {
+    switch (type) {
+         
         case CART_ACTION_TYPE.SET_CART_ITEMS:
             return {
                 ...state,...payload
